@@ -18,7 +18,7 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v3
       name: Build & push Docker image
       with:
-        image: sintef/memw-build-ubuntu-16.04
+        image: sintef/memw-build-ubuntu-20.04
         tag: v1
         registry: docker.io
         dockerfile: Dockerfile

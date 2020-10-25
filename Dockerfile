@@ -1,7 +1,9 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
-    && apt-get install -y build-essential git wget libgl1-mesa-dev ssh vim gfortran libglib2.0-0 \
+    && apt-get install -y build-essential cmake git wget libgl1-mesa-dev ssh vim gfortran libglib2.0-0 \
       libcurl4-openssl-dev libhdf5-dev libnetcdf-dev gdb \
       libnetcdf-c++4-dev dos2unix gdb \
     && rm -rf /var/lib/apt/lists/*
@@ -10,23 +12,23 @@ RUN wget http://repo.continuum.io/miniconda/Miniconda3-3.7.0-Linux-x86_64.sh -O 
    && bash ~/miniconda.sh -b -p $HOME/miniconda
 ENV PATH /root/miniconda/bin:$PATH
 
-RUN git clone -b v5.6.3 --depth 1 https://code.qt.io/qt/qt5.git \
-    && cd qt5 \
-    && perl init-repository \
-    && ./configure -opensource -confirm-license -no-xcb -skip qtconnectivity \
-        -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtconnectivity \
-        -skip qtdeclarative -skip qtdoc -skip qtdocgallery -skip qtenginio -skip qtfeedback \
-        -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras \
-        -skip qtmultimedia -skip qtpim -skip qtpurchasing -skip qtqa -skip qtquick1 \
-        -skip qtquickcontrols -skip qtquickcontrols2 -skip qtrepotools -skip qtscript \
-        -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtsvg -skip qtsystems \
-        -skip qttools -skip qttranslations -skip qtwayland -skip qtwebchannel -skip qtwebengine \
-        -skip qtwebkit -skip qtwebkit-examples -skip qtwebsockets -skip qtwebview -skip qtwinextras \
-    && make -j 2 \
-    && make install \
-    && cd .. \
-    && rm -rf qt5
-ENV PATH /usr/local/Qt-5.6.3/bin:$PATH
+# RUN git clone -b v5.6.3 --depth 1 https://code.qt.io/qt/qt5.git \
+#     && cd qt5 \
+#     && perl init-repository \
+#     && ./configure -opensource -confirm-license -no-xcb -skip qtconnectivity \
+#         -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtconnectivity \
+#         -skip qtdeclarative -skip qtdoc -skip qtdocgallery -skip qtenginio -skip qtfeedback \
+#         -skip qtgraphicaleffects -skip qtimageformats -skip qtlocation -skip qtmacextras \
+#         -skip qtmultimedia -skip qtpim -skip qtpurchasing -skip qtqa -skip qtquick1 \
+#         -skip qtquickcontrols -skip qtquickcontrols2 -skip qtrepotools -skip qtscript \
+#         -skip qtsensors -skip qtserialbus -skip qtserialport -skip qtsvg -skip qtsystems \
+#         -skip qttools -skip qttranslations -skip qtwayland -skip qtwebchannel -skip qtwebengine \
+#         -skip qtwebkit -skip qtwebkit-examples -skip qtwebsockets -skip qtwebview -skip qtwinextras \
+#     && make -j 2 \
+#     && make install \
+#     && cd .. \
+#     && rm -rf qt5
+# ENV PATH /usr/local/Qt-5.6.3/bin:$PATH
 
 RUN wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz \
     && tar xf boost_1_65_1.tar.gz \
@@ -38,16 +40,6 @@ RUN wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.
     && cd /.. \
     && rm -rf boost_1_65_1
 ENV BOOST_INCLUDEDIR=/usr/local/include
-
-RUN wget https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz \
-   && tar xf cmake-3.10.2.tar.gz \
-   && rm cmake-3.10.2.tar.gz \
-   && cd cmake-3.10.2 \
-   && ./bootstrap \
-   && make \
-   && make install \
-   && cd .. \
-   && rm -rf cmake-3.10.2
 
 RUN wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz \
    && tar xf release-1.8.0.tar.gz \
